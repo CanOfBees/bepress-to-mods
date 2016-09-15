@@ -6,4 +6,4 @@ This is a repository for converting the BePress-specific metadata (available in 
 ### What it does ###
 
 #### sample-data ####
-Grab one or both of the TAR archives attached to [TRAC-128](https://jira.lib.utk.edu/browse/TRAC-128). For privacy reasons, those files will not be stored in this repository. 
+Grab one or both of the TAR archives attached to [TRAC-128](https://jira.lib.utk.edu/browse/TRAC-128). For privacy reasons, those files will not be stored in this repository. After unpacking the archive(s) into samples, you're ready for the next step.
