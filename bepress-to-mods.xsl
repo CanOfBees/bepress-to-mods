@@ -9,29 +9,30 @@
 	<xsl:output encoding="UTF-8" indent="yes" method="xml"/>
 	<xsl:strip-space elements="*"/>
 
-	<xsl:variable name="input-collection" select="collection('./sample-data/?select=metadata.xml;recurse=yes')"/>
-	
-	<xsl:template match="$input-collection/">
-		<xsl:variable name="input-file" select="tokenize(document-uri(.), '/')"/>
-		<xsl:variable name="input-file-name" select="$input-file[position() = last()]"/>
-		<xsl:variable name="input-file-parent-directory" select="replace(replace(document-uri(.), 'metadata.xml$', ''), '^file:', '')"/>
-		<xsl:result-document href=""></xsl:result-document>
-	</xsl:template>
-	
 	<xsl:template name="main">
-		<xsl:for-each select="for $f in $input-collection return $f">
-			<xsl:variable name="input-file" select="tokenize(document-uri(.), '/')"/>
-			<xsl:variable name="input-file-name" select="$input-file[position() = last()]"/>
+		<!-- input-collection: recurse through a directory for all metadata.xml files -->
+		<xsl:variable name="input-collection" select="collection('sample-data/?select=metadata.xml;recurse=yes')"/>
+		
+		<!-- for each file in input-collection, do... -->
+		<xsl:for-each select="$input-collection">
+			<!-- 
+				set up the following variables for each file: 
+				* input-file-tokens
+				* input-file-parent-directory
+			-->
+			<xsl:variable name="input-file-tokens" select="tokenize(document-uri(.), '/')"/>
 			<xsl:variable name="input-file-parent-directory" select="replace(replace(document-uri(.), 'metadata.xml$', ''), '^file:', '')"/>
 			
-			<result-document href="{concat($input-file-parent-directory, 'MODS.xml')}">
-				<mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.5" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
-					<xsl:apply-templates/>
-				</mods>	
-			</result-document>
+			<!-- serialize a document for each match in $input-collection -->
+			<xsl:result-document href="{concat($input-file-parent-directory, 'MODS.xml')}">
+				<mods>
+					<title>test</title>
+					<identifier><xsl:value-of select="/documents/document/authors/author/email"/></identifier>
+				</mods>
+			</xsl:result-document>
 		</xsl:for-each>
 	</xsl:template>
-
+	
 	<xsl:template match="/documents">
 		<xsl:apply-templates/>
 	</xsl:template>
