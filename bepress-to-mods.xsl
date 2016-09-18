@@ -5,7 +5,14 @@
 	xmlns="http://www.loc.gov/mods/v3"
 	exclude-result-prefixes="#all"
 	version="2.0">
-
+	
+	<!-- character map for processing abstract nodes -->
+	<xsl:character-map name="cmap">
+		<xsl:output-character character="&lt;" string="''"/>
+		<xsl:output-character character="p" string="''"/>
+		<xsl:output-character character="&gt;" string="''"/>
+	</xsl:character-map>
+	
 	<xsl:output encoding="UTF-8" indent="yes" method="xml"/>
 	<xsl:strip-space elements="*"/>
 
@@ -73,10 +80,43 @@
 		</recordInfo>
 	</xsl:template>
 	
+	<xsl:template match="submission-path">
+		<identifier type="local">
+			<xsl:apply-templates/>
+		</identifier>
+	</xsl:template>
+	
+	<xsl:template match="authors">
+		<xsl:apply-templates/>
+	</xsl:template>
+	
+	<!-- do we need a positional? if authors > 1 then maybe...-->
+	<xsl:template match="author">
+		<name>
+			<namePart type="family"><xsl:value-of select="lname"/></namePart>
+			<namePart type="given"><xsl:value-of select="fname"/></namePart>
+			<role>
+				<roleTerm type="text" authority="marcrelator" valueURI="http://id.loc.gov/vocabulary/relators/aut">Author</roleTerm>
+			</role>
+		</name>
+	</xsl:template>
+	
+	<!-- this needs some work -->
+	<xsl:template match="abstract">
+		<abstract1>
+			<xsl:apply-templates/>
+		</abstract1>
+		<abstract2>
+			
+		</abstract2>
+	</xsl:template>
+	
 	<!-- ignore the following elements -->
 	<xsl:template match="articleid"/>
 	<xsl:template match="context-key"/>
 	<xsl:template match="coverpage-url"/>
 	<xsl:template match="document-type"/>
 	<xsl:template match="label"/>
+	<xsl:template match="type"/>
+	<xsl:template match="fulltext-url"/>
 </xsl:stylesheet>
