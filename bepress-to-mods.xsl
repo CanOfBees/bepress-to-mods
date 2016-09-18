@@ -17,17 +17,17 @@
 		<xsl:for-each select="$input-collection">
 			<!-- 
 				set up the following variables for each file: 
-				* input-file-tokens
-				* input-file-parent-directory
+				* input-file-tokens: tokenized document uri, using '/'
+				* input-file-parent-directory: the parent directory of the context 'metadata.xml'
+				* xp: abbreviated xpath @TODO maybe not?
 			-->
 			<xsl:variable name="input-file-tokens" select="tokenize(document-uri(.), '/')"/>
 			<xsl:variable name="input-file-parent-directory" select="replace(replace(document-uri(.), 'metadata.xml$', ''), '^file:', '')"/>
 			
 			<!-- serialize a document for each match in $input-collection -->
 			<xsl:result-document href="{concat($input-file-parent-directory, 'MODS.xml')}">
-				<mods>
-					<title>test</title>
-					<identifier><xsl:value-of select="/documents/document/authors/author/email"/></identifier>
+				<mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.5" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
+					<xsl:apply-templates/>
 				</mods>
 			</xsl:result-document>
 		</xsl:for-each>
@@ -47,4 +47,36 @@
 		</title>
 	</xsl:template>
 	
+	<xsl:template match="publication-date">
+		<originInfo>
+			<dateIssued keyDate="yes">
+				<xsl:value-of select="substring-before(.,'T')"/>
+			</dateIssued>
+		</originInfo>
+	</xsl:template>
+	
+	<xsl:template match="publication-title">
+		<relatedItem type="series">
+			<titleInfo lang="en">
+				<title>
+					<xsl:apply-templates/>
+				</title>
+			</titleInfo>
+		</relatedItem>
+	</xsl:template>
+	
+	<xsl:template match="submission-date">
+		<recordInfo>
+			<recordCreationDate encoding="w3cdtf">
+				<xsl:apply-templates/>
+			</recordCreationDate>
+		</recordInfo>
+	</xsl:template>
+	
+	<!-- ignore the following elements -->
+	<xsl:template match="articleid"/>
+	<xsl:template match="context-key"/>
+	<xsl:template match="coverpage-url"/>
+	<xsl:template match="document-type"/>
+	<xsl:template match="label"/>
 </xsl:stylesheet>
