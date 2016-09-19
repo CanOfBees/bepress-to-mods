@@ -114,6 +114,30 @@
 		</abstract>
 	</xsl:template>
 
+	<xsl:template match="fields">
+		<xsl:apply-templates/>
+	</xsl:template>
+
+	<xsl:template match="field[@name='advisor1']">
+		<name>
+			<displayForm><xsl:value-of select="value"/></displayForm>
+			<role>
+				<roleTerm type="text" authority="marcrelator" valueURI="http://id.loc.gov/vocabulary/relators/ths">Thesis advisor</roleTerm>
+			</role>
+		</name>
+	</xsl:template>
+
+	<xsl:template match="field[@name='advisor2']/value">
+		<name>
+			<displayForm><xsl:value-of select="value"/></displayForm>
+			<role>
+				<roleTerm authority="local">Committee Member</roleTerm>
+			</role>
+		</name>
+	</xsl:template>
+
+
+
 	<xsl:template match="keywords">
 		<xsl:apply-templates/>
 	</xsl:template>
