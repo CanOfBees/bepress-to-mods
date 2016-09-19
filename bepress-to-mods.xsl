@@ -16,15 +16,18 @@
 	<xsl:output encoding="UTF-8" indent="yes" method="xml"/>
 	<xsl:strip-space elements="*"/>
 
+	<!--<xsl:variable name="input-file-parent-directory"
+								select="replace(replace(document-uri(.), 'metadata.xml$', ''), '^file:', '')"/>-->
+	
 	<xsl:template name="main">
 		<!-- input-collection: recurse through a directory for all metadata.xml files -->
 		<xsl:variable name="input-collection"
-			select="collection('sample-data/?select=metadata.xml;recurse=yes')"/>
+									select="collection('sample-data/?select=metadata.xml;recurse=yes')"/>
 
 		<!-- for each file in input-collection, do... -->
 		<xsl:for-each select="$input-collection">
 			<!-- 
-				set up the following variables for each file: 
+				set up the following variables/parameters for each file: 
 				* input-file-tokens: tokenized document uri, using '/'
 				* input-file-parent-directory: the parent directory of the context 'metadata.xml'
 				* xp: abbreviated xpath @TODO maybe not?
@@ -41,7 +44,7 @@
 					version="3.5"
 					xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
 					<xsl:apply-templates>
-						<xsl:with-param name="i-f-p-d" select="$input-file-parent-directory"/>
+						<xsl:with-param name="ifpd" select="$input-file-parent-directory" tunnel="yes"/>
 					</xsl:apply-templates>
 				</mods>
 			</xsl:result-document>
@@ -210,15 +213,15 @@
 	</xsl:template>
 
 	<xsl:template match="supplemental-files">
-		<xsl:apply-templates/>
+		<xsl:param name="ifpd"/>
+		<xsl:apply-templates>
+			<xsl:with-param name="ifpd" select="$ifpd"/>
+		</xsl:apply-templates>
 	</xsl:template>
 
 	<xsl:template match="file">
-		<xsl:param name="i-f-p-d"/>
-		<xsl:variable name="supplemental-file-check" select="archive-name"/>
-
-		<xsl:message><xsl:value-of select="$supplemental-file-check"/></xsl:message>
-		<xsl:message><xsl:value-of select="$i-f-p-d"/></xsl:message>
+		<xsl:param name="ifpd"/>
+		<xsl:message>nothing? <xsl:value-of select="$ifpd"/></xsl:message>
 		<relatedItem type="constituent">
 			<titleInfo>
 				<title><xsl:apply-templates select="archive-name"/></title>
