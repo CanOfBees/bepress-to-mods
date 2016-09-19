@@ -122,19 +122,6 @@
 		<note displayLabel="Keywords Submitted by Author"><xsl:apply-templates/></note>
 	</xsl:template>
 
-	<xsl:function name="fnc:parse-text">
-		<xsl:param name="text-in"/>
-		<xsl:apply-templates select="$text-in" mode="strip-chars"/>
-	</xsl:function>
-
-	<xsl:template match="text()" mode="strip-chars">
-		<xsl:analyze-string select="." regex="'&lt;p&gt;|&lt;/p&gt;'">
-			<xsl:matching-substring/>
-			<xsl:non-matching-substring>
-				<xsl:copy-of select="."/>
-			</xsl:non-matching-substring>
-		</xsl:analyze-string>
-	</xsl:template>
 
 	<!-- ignore the following elements -->
 	<xsl:template match="articleid"/>
