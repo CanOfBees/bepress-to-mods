@@ -3,6 +3,7 @@
 	xmlns:xs="http://www.w3.og/2001/XMLSchema"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns="http://www.loc.gov/mods/v3"
+	xmlns:fnc="http://cob.net/fnc"
 	exclude-result-prefixes="#all"
 	version="2.0">
 	
@@ -12,7 +13,7 @@
 		<xsl:output-character character="p" string="''"/>
 		<xsl:output-character character="&gt;" string="''"/>
 	</xsl:character-map>
-	
+
 	<xsl:output encoding="UTF-8" indent="yes" method="xml"/>
 	<xsl:strip-space elements="*"/>
 
@@ -49,9 +50,9 @@
 	</xsl:template>
 	
 	<xsl:template match="title">
-		<title>
-			<titleInfo><xsl:apply-templates/></titleInfo>
-		</title>
+		<titleInfo>
+			<title><xsl:apply-templates/></title>
+		</titleInfo>
 	</xsl:template>
 	
 	<xsl:template match="publication-date">
@@ -95,6 +96,9 @@
 		<name>
 			<namePart type="family"><xsl:value-of select="lname"/></namePart>
 			<namePart type="given"><xsl:value-of select="fname"/></namePart>
+			<xsl:if test="suffix">
+				<namePart type="termsOfAddress"><xsl:value-of select="suffix"/></namePart>
+			</xsl:if>
 			<role>
 				<roleTerm type="text" authority="marcrelator" valueURI="http://id.loc.gov/vocabulary/relators/aut">Author</roleTerm>
 			</role>
@@ -107,10 +111,33 @@
 			<xsl:apply-templates/>
 		</abstract1>
 		<abstract2>
-			
+			<!--<xsl:apply-templates select="fnc:parse-text(text())"/>-->
+			<xsl:value-of select="fnc:parse-text(.)"/>
 		</abstract2>
 	</xsl:template>
-	
+
+	<xsl:template match="keywords">
+		<xsl:apply-templates/>
+	</xsl:template>
+
+	<xsl:template match="keyword">
+		<note displayLabel="Keywords Submitted by Author"><xsl:apply-templates/></note>
+	</xsl:template>
+
+	<xsl:function name="fnc:parse-text">
+		<xsl:param name="text-in"/>
+		<xsl:apply-templates select="$text-in" mode="strip-chars"/>
+	</xsl:function>
+
+	<xsl:template match="text()" mode="strip-chars">
+		<xsl:analyze-string select="." regex="'&lt;[/]p&gt;'">
+			<xsl:matching-substring/>
+			<xsl:non-matching-substring>
+				<xsl:copy-of select="."/>
+			</xsl:non-matching-substring>
+		</xsl:analyze-string>
+	</xsl:template>
+
 	<!-- ignore the following elements -->
 	<xsl:template match="articleid"/>
 	<xsl:template match="context-key"/>
