@@ -105,15 +105,10 @@
 		</name>
 	</xsl:template>
 	
-	<!-- this needs some work -->
 	<xsl:template match="abstract">
-		<abstract1>
-			<xsl:apply-templates/>
-		</abstract1>
-		<abstract2>
-			<!--<xsl:apply-templates select="fnc:parse-text(text())"/>-->
-			<xsl:value-of select="fnc:parse-text(.)"/>
-		</abstract2>
+		<abstract>
+			<xsl:value-of select="normalize-space(replace(., '&lt;p&gt;|&lt;/p&gt;', ''))"/>
+		</abstract>
 	</xsl:template>
 
 	<xsl:template match="keywords">
@@ -130,7 +125,7 @@
 	</xsl:function>
 
 	<xsl:template match="text()" mode="strip-chars">
-		<xsl:analyze-string select="." regex="'&lt;[/]p&gt;'">
+		<xsl:analyze-string select="." regex="'&lt;p&gt;|&lt;/p&gt;'">
 			<xsl:matching-substring/>
 			<xsl:non-matching-substring>
 				<xsl:copy-of select="."/>
