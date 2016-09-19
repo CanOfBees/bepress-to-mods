@@ -204,9 +204,23 @@
 		</note>
 	</xsl:template>
 
-	<xsl:template match="supplemental-files"/>
+	<xsl:template match="supplemental-files">
+		<xsl:apply-templates/>
+	</xsl:template>
 
-
+	<xsl:template match="file">
+		<relateItem type="constituent">
+			<titleInfo>
+				<title><xsl:apply-templates select="archive-name"/></title>
+			</titleInfo>
+			<physicalDescription>
+				<internetMediaType><xsl:apply-templates select="mime-type"/></internetMediaType>
+			</physicalDescription>
+		</relateItem>
+		<xsl:if test="description">
+			<abstract><xsl:value-of select="replace(description, '&lt;p&gt;|&lt;/p&gt;', '')"/></abstract>
+		</xsl:if>
+	</xsl:template>
 	<!-- ignore the following elements -->
 	<xsl:template match="articleid"/>
 	<xsl:template match="context-key"/>
