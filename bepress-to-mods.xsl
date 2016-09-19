@@ -129,7 +129,7 @@
 
 	<xsl:template match="field[@name='advisor2']/value">
 		<name>
-			<displayForm><xsl:value-of select="value"/></displayForm>
+			<displayForm><xsl:apply-templates/></displayForm>
 			<role>
 				<roleTerm authority="local">Committee Member</roleTerm>
 			</role>
