@@ -78,6 +78,9 @@
 			<recordCreationDate encoding="w3cdtf">
 				<xsl:apply-templates/>
 			</recordCreationDate>
+			<xsl:if test="../withdrawn">
+				<recordChangeDate keyDate="yes"><xsl:value-of select="../withdrawn"/></recordChangeDate>
+			</xsl:if>
 		</recordInfo>
 	</xsl:template>
 	
