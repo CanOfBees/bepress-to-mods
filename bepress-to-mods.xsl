@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xs="http://www.w3.og/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:etd="http://www.ndltd.org/standards/metadata/etdms/1.1" xmlns="http://www.loc.gov/mods/v3"
+	xmlns:etd="http://www.ndltd.org/standards/metadata/etdms/1.1"
+	xmlns:file="http://expath.org/spec/file"
+	xmlns="http://www.loc.gov/mods/v3"
 	exclude-result-prefixes="#all" version="2.0">
 
 	<!-- character map for processing abstract nodes -->
@@ -31,13 +33,16 @@
 			<xsl:variable name="input-file-parent-directory"
 				select="replace(replace(document-uri(.), 'metadata.xml$', ''), '^file:', '')"/>
 
+
 			<!-- serialize a document for each match in $input-collection -->
 			<xsl:result-document href="{concat($input-file-parent-directory, 'MODS.xml')}">
 				<mods xmlns:xlink="http://www.w3.org/1999/xlink"
 					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3"
 					version="3.5"
 					xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
-					<xsl:apply-templates/>
+					<xsl:apply-templates>
+						<xsl:with-param name="i-f-p-d" select="$input-file-parent-directory"/>
+					</xsl:apply-templates>
 				</mods>
 			</xsl:result-document>
 		</xsl:for-each>
@@ -209,18 +214,25 @@
 	</xsl:template>
 
 	<xsl:template match="file">
-		<relateItem type="constituent">
+		<xsl:param name="i-f-p-d"/>
+		<xsl:variable name="supplemental-file-check" select="archive-name"/>
+
+		<xsl:message><xsl:value-of select="$supplemental-file-check"/></xsl:message>
+		<xsl:message><xsl:value-of select="$i-f-p-d"/></xsl:message>
+		<relatedItem type="constituent">
 			<titleInfo>
 				<title><xsl:apply-templates select="archive-name"/></title>
 			</titleInfo>
 			<physicalDescription>
 				<internetMediaType><xsl:apply-templates select="mime-type"/></internetMediaType>
 			</physicalDescription>
-		</relateItem>
+		</relatedItem>
 		<xsl:if test="description">
 			<abstract><xsl:value-of select="replace(description, '&lt;p&gt;|&lt;/p&gt;', '')"/></abstract>
 		</xsl:if>
+		
 	</xsl:template>
+
 	<!-- ignore the following elements -->
 	<xsl:template match="articleid"/>
 	<xsl:template match="context-key"/>
