@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xs="http://www.w3.og/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:etd="http://www.ndltd.org/standards/metadata/etdms/1.1"
-	xmlns:file="http://expath.org/spec/file"
+	xmlns:file="http://expath.org/ns/file"
 	xmlns="http://www.loc.gov/mods/v3"
 	exclude-result-prefixes="#all" version="2.0">
 
@@ -39,6 +39,7 @@
 					<xsl:apply-templates select="/documents/document">
 						<xsl:with-param name="p-doc-path" select="$doc-path" tunnel="yes"/>
 					</xsl:apply-templates>
+					<xsl:call-template name="record-info"/>
 				</mods>
 			</xsl:result-document>
 		</xsl:for-each>
@@ -68,19 +69,6 @@
 				</title>
 			</titleInfo>
 		</relatedItem>
-	</xsl:template>
-
-	<xsl:template match="submission-date">
-		<recordInfo>
-			<recordCreationDate encoding="w3cdtf">
-				<xsl:apply-templates/>
-			</recordCreationDate>
-			<xsl:if test="../withdrawn">
-				<recordChangeDate keyDate="yes">
-					<xsl:value-of select="../withdrawn"/>
-				</recordChangeDate>
-			</xsl:if>
-		</recordInfo>
 	</xsl:template>
 
 	<xsl:template match="submission-path">
@@ -203,7 +191,8 @@
 
 	<xsl:template match="file">
 		<xsl:param name="p-doc-path" tunnel="yes"/>
-		<xsl:message>nothing? <xsl:value-of select="$p-doc-path"/></xsl:message>
+		<xsl:variable name="supplemental-file-list" select="file:list($p-doc-path)"/>
+		<xsl:variable name="supplemental-file-name" select="archive-name"/>
 		<relatedItem type="constituent">
 			<titleInfo>
 				<title><xsl:apply-templates select="archive-name"/></title>
@@ -211,11 +200,41 @@
 			<physicalDescription>
 				<internetMediaType><xsl:apply-templates select="mime-type"/></internetMediaType>
 			</physicalDescription>
+			<xsl:for-each select="$supplemental-file-list">
+				<xsl:analyze-string select="." regex="(^\d{{1,}}-)(.*$)">
+					<xsl:matching-substring>
+						<xsl:if test="matches($supplemental-file-name, regex-group(2))">
+							<note displayLabel="supplemental_file">
+								<xsl:value-of select="concat('SUPPLE_', substring-before(regex-group(1), '-'))"/>
+							</note>
+						</xsl:if>
+					</xsl:matching-substring>
+				</xsl:analyze-string>
+			</xsl:for-each>
+			<xsl:if test="description">
+				<abstract><xsl:value-of select="replace(description, '&lt;p&gt;|&lt;/p&gt;', '')"/></abstract>
+			</xsl:if>
 		</relatedItem>
-		<xsl:if test="description">
-			<abstract><xsl:value-of select="replace(description, '&lt;p&gt;|&lt;/p&gt;', '')"/></abstract>
-		</xsl:if>
-		
+	</xsl:template>
+	
+	<xsl:template name="record-info">
+		<recordInfo>
+			<recordCreationDate encoding="w3cdtf">
+				<xsl:value-of select="submission-date"/>
+			</recordCreationDate>
+			<recordChangeDate><xsl:value-of select="current-date()"/></recordChangeDate>
+			<xsl:if test="/documents/document/withdrawn">
+				<recordChangeDate keyDate="yes">
+					<xsl:value-of select="/documents/document/withdrawn"/>
+				</recordChangeDate>
+			<!--
+				commenting this for now; throws a validity error
+				<recordInfoNote displayLabel="withdrawn">
+					<xsl:value-of select="concat('Record withdrawn ', /documents/document/withdrawn)"/>
+				</recordInfoNote>
+			-->
+			</xsl:if>
+		</recordInfo>
 	</xsl:template>
 
 	<!-- ignore the following elements -->
@@ -228,6 +247,8 @@
 	<xsl:template match="fulltext-url"/>
 	<xsl:template match="field[@name = 'degree_name']/value"/>
 	<xsl:template match="field[@name = 'department']/value"/>
+	<xsl:template match="submission-date"/>
+	<xsl:template match="withdrawn"/>
 
 	<!-- temporarily ignore these -->
 	<xsl:template match="field[@name = 'instruct']/value"/>
