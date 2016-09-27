@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xs="http://www.w3.og/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:etd="http://www.ndltd.org/standards/metadata/etdms/1.1"
+	xmlns:cob="http://cob.net/fn"
 	xmlns:file="http://expath.org/ns/file"
 	xmlns="http://www.loc.gov/mods/v3"
 	exclude-result-prefixes="#all" version="2.0">
@@ -32,6 +33,7 @@
 					<xsl:apply-templates select="/documents/document">
 						<xsl:with-param name="p-doc-path" select="$doc-path" tunnel="yes"/>
 					</xsl:apply-templates>
+					<xsl:call-template name="genre-authority"/>
 					<xsl:call-template name="record-info"/>
 				</mods>
 			</xsl:result-document>
@@ -58,7 +60,7 @@
 		<relatedItem type="series">
 			<titleInfo lang="en">
 				<title>
-					<xsl:apply-templates/>
+					<xsl:value-of select="cob:escape(.)"/>
 				</title>
 			</titleInfo>
 		</relatedItem>
@@ -109,7 +111,7 @@
 
 	<xsl:template match="abstract">
 		<abstract>
-			<xsl:value-of select="normalize-space(replace(., '&lt;p&gt;|&lt;/p&gt;', ''))"/>
+			<xsl:value-of select="cob:escape(.)"/>
 		</abstract>
 	</xsl:template>
 
@@ -205,7 +207,7 @@
 				</xsl:analyze-string>
 			</xsl:for-each>
 			<xsl:if test="description">
-				<abstract><xsl:value-of select="replace(description, '&lt;p&gt;|&lt;/p&gt;', '')"/></abstract>
+				<abstract><xsl:value-of select="cob:escape(description)"/></abstract>
 			</xsl:if>
 		</relatedItem>
 	</xsl:template>
@@ -230,6 +232,19 @@
 		</recordInfo>
 	</xsl:template>
 
+	<xsl:template name="genre-authority">
+		<xsl:if test="/documents/document/submission-path[(starts-with(., 'utk_gradthes')) or (starts-with(., 'utk_graddiss'))]">
+			<genre authority="lcgft" valueURI="http://id.loc.gov/authorities/genreForms/gf2014026039">Academic theses</genre>
+		</xsl:if>
+	</xsl:template>
+
+	<xsl:function name="cob:escape" as="xs:string">
+		<xsl:param name="text-in" as="xs:string"/>
+		<xsl:sequence select="if (contains(.,'&lt;'))
+													then (normalize-space(replace($text-in, '&lt;/?\p{L}+&gt;', '')))
+													else $text-in"/>
+	</xsl:function>
+
 	<!-- ignore the following elements -->
 	<xsl:template match="articleid"/>
 	<xsl:template match="context-key"/>
@@ -242,6 +257,7 @@
 	<xsl:template match="field[@name = 'department']/value"/>
 	<xsl:template match="submission-date"/>
 	<xsl:template match="withdrawn"/>
+	<xsl:template match="native-url"/>
 
 	<!-- temporarily ignore these -->
 	<xsl:template match="field[@name = 'instruct']/value"/>

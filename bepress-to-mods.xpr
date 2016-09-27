@@ -22,11 +22,11 @@
                         <scenarioAssociation-array>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>../../../../../../home/bridger/src/DLTN_temp_copy/XSLT/mtsubuchananDCtoMODS.xsl</String>
+                                    <String>bepress-to-mods.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
-                                        <String>mtsubuchananDCtoMODS</String>
+                                        <String>bepress-to-mods</String>
                                     </list>
                                 </field>
                                 <field name="scenarioTypes">
@@ -52,11 +52,11 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>bepress-to-mods.xsl</String>
+                                    <String>../../../../../../home/bridger/src/DLTN_temp_copy/XSLT/mtsubuchananDCtoMODS.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
-                                        <String>bepress-to-mods</String>
+                                        <String>mtsubuchananDCtoMODS</String>
                                     </list>
                                 </field>
                                 <field name="scenarioTypes">
