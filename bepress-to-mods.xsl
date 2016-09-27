@@ -6,13 +6,6 @@
 	xmlns="http://www.loc.gov/mods/v3"
 	exclude-result-prefixes="#all" version="2.0">
 
-	<!-- character map for processing abstract nodes -->
-	<xsl:character-map name="cmap">
-		<xsl:output-character character="&lt;" string="''"/>
-		<xsl:output-character character="p" string="''"/>
-		<xsl:output-character character="&gt;" string="''"/>
-	</xsl:character-map>
-
 	<xsl:output encoding="UTF-8" indent="yes" method="xml"/>
 	<xsl:strip-space elements="*"/>
 
