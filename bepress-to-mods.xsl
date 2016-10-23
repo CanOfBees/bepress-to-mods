@@ -240,7 +240,7 @@
 
 	<xsl:function name="cob:escape" as="xs:string">
 		<xsl:param name="text-in" as="xs:string"/>
-		<xsl:sequence select="if (contains(.,'&lt;'))
+		<xsl:sequence select="if (contains($text-in,'&lt;'))
 													then (normalize-space(replace($text-in, '&lt;/?\p{L}+&gt;', '')))
 													else $text-in"/>
 	</xsl:function>
