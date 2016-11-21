@@ -9,6 +9,9 @@
 
 	<xsl:output encoding="UTF-8" indent="yes" method="xml"/>
 	<xsl:strip-space elements="*"/>
+	
+	<!-- includes -->
+	<xsl:include href="includes/functions.xsl"/>
 
 	<!-- input-collection: recurse through a directory for all metadata.xml files -->
 	<xsl:variable name="input-collection"
@@ -166,7 +169,7 @@
 
 	<xsl:template match="field[@name = 'comments']/value">
 		<note displayLabel="Submitted Comment">
-			<xsl:apply-templates/>
+			<xsl:value-of select="cob:escape(.)"/>
 		</note>
 	</xsl:template>
 
@@ -238,13 +241,6 @@
 		</xsl:if>
 	</xsl:template>
 
-	<xsl:function name="cob:escape" as="xs:string">
-		<xsl:param name="text-in" as="xs:string"/>
-		<xsl:sequence select="if (contains(.,'&lt;'))
-													then (normalize-space(replace($text-in, '&lt;/?\p{L}+&gt;', '')))
-													else $text-in"/>
-	</xsl:function>
-
 	<!-- ignore the following elements -->
 	<xsl:template match="articleid"/>
 	<xsl:template match="context-key"/>
@@ -255,6 +251,7 @@
 	<xsl:template match="fulltext-url"/>
 	<xsl:template match="field[@name = 'degree_name']/value"/>
 	<xsl:template match="field[@name = 'department']/value"/>
+	<xsl:template match="field[@name = 'source_fulltext_url']/value"/>
 	<xsl:template match="submission-date"/>
 	<xsl:template match="withdrawn"/>
 	<xsl:template match="native-url"/>
