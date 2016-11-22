@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project version="18.0">
+<project version="18.1">
     <meta>
         <filters directoryPatterns="" filePatterns="bepress-to-mods.xpr" positiveFilePatterns="" showHiddenFiles="false"/>
         <options>
-            <serialized version="18.0" xml:space="preserve">
+            <serialized version="18.1" xml:space="preserve">
                 <serializableOrderedMap>
                     <entry>
                         <String>editor.detect.indent.on.open</String>
@@ -39,6 +39,7 @@
                     </entry>
                     <entry>
                         <String>scenarios</String>
+                        <scenario-array>
                             <scenario>
                                 <field name="advancedOptionsMap">
                                     <serializableOrderedMap>
@@ -49,7 +50,7 @@
                                                     <String>saxon.source.no.schema.based.validation</String>
                                                 </field>
                                                 <field name="schemaVersion">
-                                                    <String>1.0</String>
+                                                    <String>1.1</String>
                                                 </field>
                                                 <field name="treatResultValidationErrorsAsWarnings">
                                                     <Boolean>false</Boolean>
@@ -223,7 +224,7 @@
                                     <Boolean>false</Boolean>
                                 </field>
                                 <field name="showInXMLPane">
-                                    <Boolean>true</Boolean>
+                                    <Boolean>false</Boolean>
                                 </field>
                                 <field name="showInSVGPane">
                                     <Boolean>false</Boolean>
@@ -254,6 +255,7 @@
         </options>
     </meta>
     <projectTree name="bepress-to-mods.xpr">
+        <folder name="recursive-mods"/>
         <folder path="."/>
     </projectTree>
 </project>
