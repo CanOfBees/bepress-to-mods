@@ -13,14 +13,10 @@
 	<xsl:function name="cob:escape">
 		<xsl:param name="text-in"/>
 		<xsl:sequence select="if (contains($text-in, '&lt;'))
-													then (if (contains($text-in, '&lt;a'))
-													      then (normalize-space(replace($text-in, '&lt;a href=&quot;', '')))
-													      else (normalize-space(cob:escape($text-in))))
-                          else (if (contains($text-in, '&quot;&gt;'))
-                                then (normalize-space(replace($text-in, '&quot;&gt;/?\p{L}+&gt;', '')))
-                                else (normalize-space(cob:escape($text-in))))
-													(:then (normalize-space(replace($text-in, '&lt;/?\p{L}+&gt;', '')))
-													else normalize-space($text-in):)"/>
+                          then (if (contains($text-in, '&lt;a'))
+                                then (normalize-space(replace($text-in, '&lt;/?\p{L}+&gt;|&lt;a href=&quot;([A-Za-z0-9:/.]+)&quot;&gt;[A-Za-z0-9:/.]+&lt;/?\p{L}+&gt;', '$1')))
+                                else (normalize-space(replace($text-in, '&lt;/?\p{L}+&gt;', ''))))
+                          else (normalize-space($text-in))"/>
 	</xsl:function>
 	
 </xsl:stylesheet>
