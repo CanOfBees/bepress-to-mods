@@ -175,10 +175,13 @@
 
 	<xsl:template match="keywords">
 		<xsl:apply-templates/>
+	  <note displayLabel="Keywords Submitted by Author::B">
+	    <xsl:value-of select="for $k in (keyword) return string-join($k, ' ')" separator=", "/>
+	  </note>
 	</xsl:template>
 
 	<xsl:template match="keyword">
-		<note displayLabel="Keywords Submitted by Author">
+		<note displayLabel="Keywords Submitted by Author::A">
 			<xsl:apply-templates/>
 		</note>
 	</xsl:template>
