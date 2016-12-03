@@ -174,16 +174,9 @@
 	</xsl:template>
 
 	<xsl:template match="keywords">
-		<xsl:apply-templates/>
-	  <note displayLabel="Keywords Submitted by Author::B">
+		<note displayLabel="Keywords Submitted by Author">
 	    <xsl:value-of select="for $k in (keyword) return string-join($k, ' ')" separator=", "/>
 	  </note>
-	</xsl:template>
-
-	<xsl:template match="keyword">
-		<note displayLabel="Keywords Submitted by Author::A">
-			<xsl:apply-templates/>
-		</note>
 	</xsl:template>
 
 	<xsl:template match="supplemental-files">
@@ -206,7 +199,7 @@
 					<xsl:matching-substring>
 						<xsl:if test="matches($supplemental-file-name, regex-group(2))">
 							<note displayLabel="supplemental_file">
-								<xsl:value-of select="concat('SUPPLE_', substring-before(regex-group(1), '-'))"/>
+								<xsl:value-of select="concat('SUPPL_', substring-before(regex-group(1), '-'))"/>
 							</note>
 						</xsl:if>
 					</xsl:matching-substring>
