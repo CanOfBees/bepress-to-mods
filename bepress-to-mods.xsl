@@ -174,8 +174,8 @@
 	</xsl:template>
 
 	<xsl:template match="field[@name='embargo_date']/value">
-    <xsl:variable name="c-date" select="xs:date(format-date(current-date(), '[Y]-[M,2]-[D,2]'))"/>
-    <xsl:variable name="e-date" select="xs:date(substring-before(., 'T'))"/>
+    <xsl:variable name="c-date" as="xs:date" select="xs:date(format-date(current-date(), '[Y]-[M,2]-[D,2]'))"/>
+    <xsl:variable name="e-date" as="xs:date" select="xs:date(substring-before(., 'T'))"/>
 
     <xsl:if test="$e-date ge $c-date">
       <accessCondition type="restriction on access">Restricted: cannot be viewed until <xsl:value-of select="$e-date"/></accessCondition>
