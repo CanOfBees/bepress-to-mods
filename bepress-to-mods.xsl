@@ -173,6 +173,15 @@
 		</note>
 	</xsl:template>
 
+	<xsl:template match="field[@name='embargo_date']/value">
+    <xsl:variable name="c-date" select="xs:date(format-date(current-date(), '[Y]-[M,2]-[D,2]'))"/>
+    <xsl:variable name="e-date" select="xs:date(substring-before(., 'T'))"/>
+
+    <xsl:if test="$e-date ge $c-date">
+      <accessCondition type="restriction on access">Restricted: cannot be viewed until <xsl:value-of select="$e-date"/></accessCondition>
+    </xsl:if>
+	</xsl:template>
+
 	<xsl:template match="keywords">
 		<note displayLabel="Keywords Submitted by Author">
 	    <xsl:value-of select="for $k in (keyword) return string-join($k, ' ')" separator=", "/>
@@ -255,5 +264,4 @@
 	<!-- temporarily ignore these -->
 	<xsl:template match="field[@name = 'instruct']/value"/>
 	<xsl:template match="field[@name = 'publication_date']/value"/>
-	<xsl:template match="field[@name = 'embargo_date']/value"/>
 </xsl:stylesheet>
