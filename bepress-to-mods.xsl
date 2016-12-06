@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:xs="http://www.w3.og/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:etd="http://www.ndltd.org/standards/metadata/etdms/1.1"
 	xmlns:cob="http://cob.net/fn"
 	xmlns:file="http://expath.org/ns/file"
@@ -173,14 +173,19 @@
 		</note>
 	</xsl:template>
 
-	<xsl:template match="keywords">
-		<xsl:apply-templates/>
+	<xsl:template match="field[@name='embargo_date']/value">
+    <xsl:variable name="c-date" as="xs:date" select="xs:date(format-date(current-date(), '[Y]-[M,2]-[D,2]'))"/>
+    <xsl:variable name="e-date" as="xs:date" select="xs:date(substring-before(., 'T'))"/>
+
+    <xsl:if test="$e-date ge $c-date">
+      <accessCondition type="restriction on access">Restricted: cannot be viewed until <xsl:value-of select="$e-date"/></accessCondition>
+    </xsl:if>
 	</xsl:template>
 
-	<xsl:template match="keyword">
+	<xsl:template match="keywords">
 		<note displayLabel="Keywords Submitted by Author">
-			<xsl:apply-templates/>
-		</note>
+	    <xsl:value-of select="for $k in (keyword) return string-join($k, ' ')" separator=", "/>
+	  </note>
 	</xsl:template>
 
 	<xsl:template match="supplemental-files">
@@ -203,7 +208,7 @@
 					<xsl:matching-substring>
 						<xsl:if test="matches($supplemental-file-name, regex-group(2))">
 							<note displayLabel="supplemental_file">
-								<xsl:value-of select="concat('SUPPLE_', substring-before(regex-group(1), '-'))"/>
+								<xsl:value-of select="concat('SUPPL_', substring-before(regex-group(1), '-'))"/>
 							</note>
 						</xsl:if>
 					</xsl:matching-substring>
@@ -259,5 +264,4 @@
 	<!-- temporarily ignore these -->
 	<xsl:template match="field[@name = 'instruct']/value"/>
 	<xsl:template match="field[@name = 'publication_date']/value"/>
-	<xsl:template match="field[@name = 'embargo_date']/value"/>
 </xsl:stylesheet>
