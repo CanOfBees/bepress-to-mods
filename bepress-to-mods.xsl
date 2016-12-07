@@ -224,6 +224,8 @@
 			<recordCreationDate encoding="w3cdtf">
 				<xsl:value-of select="submission-date"/>
 			</recordCreationDate>
+      <recordContentSource>University of Tennessee Knoxville, Libraries</recordContentSource>
+      <recordOrigin>Converted from bepress XML to MODS in general conformance to MODS Guidelines (Version 3.5).</recordOrigin>
 			<recordChangeDate><xsl:value-of select="current-date()"/></recordChangeDate>
 			<xsl:if test="/documents/document/withdrawn">
 				<recordChangeDate keyDate="yes">
