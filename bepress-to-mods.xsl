@@ -176,7 +176,6 @@
 	<xsl:template match="field[@name='embargo_date']/value">
     <xsl:variable name="c-date" as="xs:date" select="xs:date(format-date(current-date(), '[Y]-[M,2]-[D,2]'))"/>
     <xsl:variable name="e-date" as="xs:date" select="xs:date(substring-before(., 'T'))"/>
-
     <xsl:if test="$e-date ge $c-date">
       <accessCondition type="restriction on access">Restricted: cannot be viewed until <xsl:value-of select="$e-date"/></accessCondition>
     </xsl:if>
@@ -225,17 +224,13 @@
 			<recordCreationDate encoding="w3cdtf">
 				<xsl:value-of select="submission-date"/>
 			</recordCreationDate>
+      <recordContentSource>University of Tennessee Knoxville, Libraries</recordContentSource>
+      <recordOrigin>Converted from bepress XML to MODS in general conformance to MODS Guidelines (Version 3.5).</recordOrigin>
 			<recordChangeDate><xsl:value-of select="current-date()"/></recordChangeDate>
 			<xsl:if test="/documents/document/withdrawn">
 				<recordChangeDate keyDate="yes">
 					<xsl:value-of select="/documents/document/withdrawn"/>
 				</recordChangeDate>
-			<!--
-				commenting this for now; throws a validity error
-				<recordInfoNote displayLabel="withdrawn">
-					<xsl:value-of select="concat('Record withdrawn ', /documents/document/withdrawn)"/>
-				</recordInfoNote>
-			-->
 			</xsl:if>
 		</recordInfo>
 	</xsl:template>
