@@ -18,7 +18,12 @@ Due some functionality requirements, oXygen is required for testing/running this
 ##### Using oXygen's project functionality. #####
  
 1. This repository includes an oXygen project file. After starting oXygen, select the **Project** menu > **open project** > select *bepress-to-mods.xpr*
+![Open Project](./img/project-open-project.png)
 2. This opens the **Project** view in oXygen
-3. ...
+3. From the Project View, expand the `bepress-to-mods` directory and double-click `bepress-to-mods.xsl` to open the file.
+![Open bepress-to-mods.xsl](./img/open-transform.png)
+4. With the assumption that you have an appropriate set of test data in the `sample-data` directory, you can test the transform by clicking the 'Right Directional Arrow In A Squared Circle' icon\*\*
+![Click!](./img/apply-transform-scenarios.png)
 
 \* If you have a license for Saxon-EE, then you should be fine and can run this from the CLI.
+\*\* **NOT** the real name for this icon!!!
