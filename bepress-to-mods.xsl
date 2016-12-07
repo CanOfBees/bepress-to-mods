@@ -231,12 +231,6 @@
 				<recordChangeDate keyDate="yes">
 					<xsl:value-of select="/documents/document/withdrawn"/>
 				</recordChangeDate>
-			<!--
-				commenting this for now; throws a validity error
-				<recordInfoNote displayLabel="withdrawn">
-					<xsl:value-of select="concat('Record withdrawn ', /documents/document/withdrawn)"/>
-				</recordInfoNote>
-			-->
 			</xsl:if>
 		</recordInfo>
 	</xsl:template>
