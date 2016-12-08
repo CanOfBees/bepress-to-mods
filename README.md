@@ -24,6 +24,8 @@ Due some functionality requirements, oXygen is required for testing/running this
 ![Open bepress-to-mods.xsl](./img/open-transform.png)
 4. With the assumption that you have an appropriate set of test data in the `sample-data` directory, you can test the transform by clicking the 'Right Directional Arrow In A Squared Circle' icon\*\*
 ![Click!](./img/apply-transform-scenarios.png)
+5. The output should be available in `sample-data/$FILE_NUMBER/MODS.xml`. You can validate using the 'Red Check Mark In A Box'.
+![Validate Output](./img/validate-output.png)
 
 \* If you have a license for Saxon-EE, then you should be fine and can run this from the CLI.
 \*\* **NOT** the real name for this icon!!!
