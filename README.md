@@ -28,4 +28,5 @@ Due some functionality requirements, oXygen is required for testing/running this
 ![Validate Output](./img/validate-output.png)
 
 \* If you have a license for Saxon-EE, then you should be fine and can run this from the CLI.
+
 \*\* **NOT** the real name for this icon!!!
